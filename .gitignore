@@ -1,0 +1,7 @@
+data/cves/
+data/hf/
+data/raw/
+data/indices/
+data/dataset.db
+data/parquet/
+data/parquet_v2/
