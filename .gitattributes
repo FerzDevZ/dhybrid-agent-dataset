@@ -1,1 +1,1 @@
-data/parquet_v3/**/*.parquet filter=lfs merge=lfs -text
+data/**/*.parquet filter=lfs merge=lfs -text

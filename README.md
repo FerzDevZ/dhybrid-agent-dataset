@@ -13,24 +13,21 @@ pentest-dataset/
 │   ├── fetch_nvd.py              #   download + ekstrak full dump NVD
 │   ├── fetch_exploitdb.py        #   fetch Exploit-DB (GitLab CSV) + PoC + markdown
 │   ├── fetch_github_writeups.py  #   clone repo writeup GitHub (shallow)
+│   ├── fetch_hf.py               #   fetch enrichment HuggingFace (CIRCL)
 │   ├── build_index.py            #   bangun dataset.db (SQLite + FTS5)
+│   ├── export_parquet.py         #   export SQLite → parquet (zstd)
+│   ├── push_hf_multi.py          #   push parquet ke HuggingFace Hub
 │   └── query.py                  #   interface query untuk agent (output JSON)
 └── data/
-    ├── dataset.db                # SQLite + FTS5, siap query
-    ├── hf/                       # dataset HuggingFace (CIRCL dll.) — JSONL + meta
-    ├── cves/                     # data/CVE-YYYY-NNNNN.json (full NVD per CVE)
-    ├── writeups/
-    │   ├── exploitdb/            # <id>-<slug>.md (markdown per exploit)
-    │   └── github/               # clone repo (PayloadsAllTheThings, hacktricks, ...)
-    ├── raw/
-    │   ├── nvd/                  # nvdcve-2.0-<YEAR>.json.gz (feed mentah)
-    │   └── exploitdb/            # files_exploits.csv + files/ (46k PoC) + repo/ (git clone)
-    └── indices/
-        ├── cve_index.jsonl       # 1 baris JSON per CVE (id,severity,cvss,cwe,...)
-        ├── exploitdb_index.jsonl
-        ├── exploitdb_cve_map.json# exploit-id -> [CVE-...]
-        └── (github writeups tercatat di data/writeups/github/_repos.json)
+    ├── cves/train/data.parquet               # ~373k CVE (NVD)
+    ├── exploits/train/data.parquet           # ~46k exploit-db
+    ├── patches/train/data.parquet            # patch diff + commit URL
+    ├── scores/train/data_part{0..14}.parquet # enrichment CIRCL (15 part ≤13MB)
+    └── writeups/train/data.parquet           # ~48k writeup
 ```
+
+> Saat build lokal penuh, folder tambahan muncul: `dataset.db`, `hf/`, `cves/`,
+> `writeups/`, `raw/`, `indices/`. Ini tidak di-commit ke GitHub (lihat `.gitignore`).
 
 ## Pipeline (build ulang)
 
